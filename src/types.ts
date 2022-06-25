@@ -11,6 +11,8 @@ export interface IInput {
   prefix?: IPrefix;
   rules?: string[];
   messages?: any;
+  preprocess?: any; // for now
+  validation?: any; // for now
 }
 export interface Attributes {
   id: string;
@@ -28,4 +30,9 @@ export interface Attributes {
 
 export interface IPrefix {
   classes: string[];
+}
+
+export interface IStore {
+  valid: boolean;
+  values: any; // for now
 }

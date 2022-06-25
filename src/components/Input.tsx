@@ -1,16 +1,26 @@
-import { Component, createSignal, For, JSX } from "solid-js";
+import { Component } from "solid-js";
 import { IInput } from "../types";
-import { isRequired } from "../urils/helper";
+import { isRequired } from "../utils/helper";
+import FormStore from "../utils/stores";
 
 type IProps = {
   field: IInput;
 };
 
 const Input: Component<IProps> = ({ field }: IProps) => {
-  const [value, setValue] = createSignal(field.value ?? null);
+  const { data, setData } = FormStore;
 
   const onChangerValue = (e: any) => {
-    setValue(e.target.value);
+    const newValue = e.target.value;
+    const updateValues = {
+      ...data().values,
+      [field.name]: newValue,
+    };
+    const newData = {
+      ...data(),
+      values: updateValues,
+    };
+    setData(newData);
   };
 
   return (
@@ -18,7 +28,7 @@ const Input: Component<IProps> = ({ field }: IProps) => {
       <input
         type={field.attributes.type}
         name={field.name}
-        value={value()}
+        value={field.value ?? "null"}
         id={field.attributes.id ? field.attributes.id : field.name}
         class={field.attributes.classes}
         placeholder={field.attributes.placeholder}
