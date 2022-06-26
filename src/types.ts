@@ -33,6 +33,8 @@ export interface IPrefix {
 }
 
 export interface IStore {
+  form_name: string;
   valid: boolean;
   values: any; // for now
+  fields: IInput[];
 }

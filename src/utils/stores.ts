@@ -1,11 +1,10 @@
-import { createSignal, createMemo, createRoot } from "solid-js";
+import { createSignal, createRoot } from "solid-js";
 import { IStore } from "../types";
 
 function formStore() {
-  const [data, setData] = createSignal<IStore>({
-    valid: true,
-    values: {},
-  });
+  const [data, setData] = createSignal<IStore[]>([
+    { form_name: "", valid: true, values: {}, fields: [] },
+  ]);
   return { data, setData };
 }
 

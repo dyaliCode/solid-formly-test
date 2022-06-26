@@ -1,5 +1,6 @@
-import { Component } from "solid-js";
+import { Component, createSignal } from "solid-js";
 import { IInput } from "../types";
+import { onChangeValue } from "../utils/form";
 import { isRequired } from "../utils/helper";
 import FormStore from "../utils/stores";
 
@@ -8,20 +9,22 @@ type IProps = {
 };
 
 const Input: Component<IProps> = ({ field }: IProps) => {
+  const [value, setValue] = createSignal(field.value ?? null);
   const { data, setData } = FormStore;
 
-  const onChangerValue = (e: any) => {
-    const newValue = e.target.value;
-    const updateValues = {
-      ...data().values,
-      [field.name]: newValue,
-    };
-    const newData = {
-      ...data(),
-      values: updateValues,
-    };
-    setData(newData);
-  };
+  // const onChangeValue = (e: any) => {
+  //   const newValue = e.target.value;
+  //   setValue(newValue);
+  //   //   const updateValues = {
+  //   //     ...data().values,
+  //   //     [field.name]: newValue,
+  //   //   };
+  //   //   const newData = {
+  //   //     ...data(),
+  //   //     values: updateValues,
+  //   //   };
+  //   //   setData(newData);
+  // };
 
   return (
     <>
@@ -39,7 +42,11 @@ const Input: Component<IProps> = ({ field }: IProps) => {
         max={field.attributes.max}
         step={field.attributes.step}
         autocomplete={field.attributes.autocomplete}
-        onKeyUp={onChangerValue}
+        onKeyUp={(e: any) => {
+          const newValue = e.target.value;
+          setValue(newValue);
+          onChangeValue(field.name, value());
+        }}
       />
     </>
   );

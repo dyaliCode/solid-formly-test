@@ -3,12 +3,13 @@ import Field from "./components/Field";
 import { IInput } from "./types";
 import FormStore from "./utils/stores";
 
-const form_name = "form1";
+const form_name1 = "form1";
+const form_name2 = "form2";
 const fields: IInput[] = [
   {
     type: "input",
     name: "first-name",
-    value: "first-name",
+    value: "",
     attributes: {
       type: "text",
       label: "First name",
@@ -49,10 +50,18 @@ const App: Component = () => {
   return (
     <div class="container">
       <div class="grid">
-        <form>
-          <Field fields={fields} form_name={form_name} />
-          <button type="button">submit</button>
-        </form>
+        <div class="col">
+          <form>
+            <Field fields={fields} form_name={form_name1} />
+            <button type="button">submit1</button>
+          </form>
+        </div>
+        <div class="col">
+          <form>
+            <Field fields={fields} form_name={form_name2} />
+            <button type="button">submit2</button>
+          </form>
+        </div>
       </div>
     </div>
   );
