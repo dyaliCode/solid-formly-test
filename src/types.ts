@@ -1,6 +1,6 @@
 export interface IForm {
-  fields: IInput[];
   form_name: string;
+  fields: IInput[];
 }
 
 export interface IInput {

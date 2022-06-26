@@ -2,10 +2,10 @@ import { IInput, IStore } from "../types";
 import FormStore from "../utils/stores";
 import { validate } from "./validation";
 
-const { data, setData } = FormStore;
+const { forms, setForms } = FormStore;
 
 // Init data form
-export async function onInitValues(fields: IInput[]) {
+export async function onInitValues(form_name: string, fields: IInput[]) {
   let values: any = [];
 
   let updateFields = await Promise.all(
@@ -26,11 +26,21 @@ export async function onInitValues(fields: IInput[]) {
     }
   });
 
-  setData({
+  let newForm: IStore = {
+    form_name,
     valid: isValid ? false : true,
     values,
     fields: updateFields,
-  });
+  };
+  // newData.push({
+  //   valid: isValid ? false : true,
+  //   values,
+  //   fields: updateFields,
+  // })
+
+  setForms((d) => [...d, newForm]);
+
+  console.log("forms()", forms());
 }
 
 //
@@ -40,11 +50,13 @@ export async function onChangeValue(
   newValue: any
 ) {
   let updateValues = {
-    ...data().values,
+    ...forms().values,
     [field_name]: newValue,
   };
 
-  const form: any = data().find((form: IStore) => form.form_name === form_name);
+  const form: any = forms().find(
+    (form: IStore) => form.form_name === form_name
+  );
 
   let updateFields = await Promise.all(
     form.fields.map(async (field: IInput) => {
@@ -63,9 +75,11 @@ export async function onChangeValue(
     }
   });
 
-  setData({
+  const _form: IStore = {
+    form_name: "form_name",
     valid: isValid ? false : true,
     values: updateValues,
     fields: updateFields,
-  });
+  };
+  setForms([_form]);
 }

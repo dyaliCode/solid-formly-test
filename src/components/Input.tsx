@@ -10,7 +10,7 @@ type IProps = {
 
 const Input: Component<IProps> = ({ field }: IProps) => {
   const [value, setValue] = createSignal(field.value ?? null);
-  const { data, setData } = FormStore;
+  const { forms, setForms } = FormStore;
 
   // const onChangeValue = (e: any) => {
   //   const newValue = e.target.value;
@@ -23,7 +23,7 @@ const Input: Component<IProps> = ({ field }: IProps) => {
   //   //     ...data(),
   //   //     values: updateValues,
   //   //   };
-  //   //   setData(newData);
+  //   //   setForms(newData);
   // };
 
   return (
@@ -45,7 +45,7 @@ const Input: Component<IProps> = ({ field }: IProps) => {
         onKeyUp={(e: any) => {
           const newValue = e.target.value;
           setValue(newValue);
-          onChangeValue(field.name, value());
+          onChangeValue("form_name", field.name, value());
         }}
       />
     </>
