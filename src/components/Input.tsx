@@ -5,12 +5,19 @@ import { isRequired } from "../utils/helper";
 import FormStore from "../utils/stores";
 
 type IProps = {
+  form_name: string;
   field: IInput;
 };
 
-const Input: Component<IProps> = ({ field }: IProps) => {
+const Input: Component<IProps> = ({ form_name, field }: IProps) => {
   const [value, setValue] = createSignal(field.value ?? null);
   const { forms, setForms } = FormStore;
+
+  const changeValueHanlder = async (e: any) => {
+    const newValue = e.target.value;
+    setValue(newValue);
+    onChangeValue(form_name, field.name, value());
+  };
 
   // const onChangeValue = (e: any) => {
   //   const newValue = e.target.value;
@@ -42,11 +49,7 @@ const Input: Component<IProps> = ({ field }: IProps) => {
         max={field.attributes.max}
         step={field.attributes.step}
         autocomplete={field.attributes.autocomplete}
-        onKeyUp={(e: any) => {
-          const newValue = e.target.value;
-          setValue(newValue);
-          onChangeValue("form_name", field.name, value());
-        }}
+        onKeyUp={(e: any) => changeValueHanlder(e)}
       />
     </>
   );

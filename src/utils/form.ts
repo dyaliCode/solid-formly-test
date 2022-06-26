@@ -26,21 +26,14 @@ export async function onInitValues(form_name: string, fields: IInput[]) {
     }
   });
 
-  let newForm: IStore = {
+  let new_form: IStore = {
     form_name,
     valid: isValid ? false : true,
     values,
     fields: updateFields,
   };
-  // newData.push({
-  //   valid: isValid ? false : true,
-  //   values,
-  //   fields: updateFields,
-  // })
 
-  setForms((d) => [...d, newForm]);
-
-  console.log("forms()", forms());
+  setForms((old_forms: IStore[]) => [...old_forms, new_form]);
 }
 
 //
@@ -58,7 +51,7 @@ export async function onChangeValue(
     (form: IStore) => form.form_name === form_name
   );
 
-  let updateFields = await Promise.all(
+  let updateFields: IInput[] = await Promise.all(
     form.fields.map(async (field: IInput) => {
       if (field.name === field_name) {
         field.value = newValue;
@@ -75,11 +68,26 @@ export async function onChangeValue(
     }
   });
 
-  const _form: IStore = {
-    form_name: "form_name",
+  let new_form: IStore = {
+    form_name,
     valid: isValid ? false : true,
     values: updateValues,
     fields: updateFields,
   };
-  setForms([_form]);
+
+  const formIndex = forms().findIndex(
+    (form: IStore) => form.form_name == form_name
+  );
+  forms()[formIndex] = new_form;
+  setForms(forms());
+
+  console.log("forms() :>> ", forms());
+
+  // const _form: IStore = {
+  //   form_name: "form_name",
+  //   valid: isValid ? false : true,
+  //   values: updateValues,
+  //   fields: updateFields,
+  // };
+  // setForms([_form]);
 }
