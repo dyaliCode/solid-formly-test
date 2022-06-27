@@ -1,37 +1,28 @@
 import { Component, createSignal } from "solid-js";
 import { IInput } from "../types";
-import { onChangeValue } from "../utils/form";
 import { isRequired } from "../utils/helper";
-import FormStore from "../utils/stores";
 
 type IProps = {
   form_name: string;
   field: IInput;
+  changeValue: Function;
 };
 
-const Input: Component<IProps> = ({ form_name, field }: IProps) => {
+const Input: Component<IProps> = ({
+  form_name,
+  field,
+  changeValue,
+}: IProps) => {
   const [value, setValue] = createSignal(field.value ?? null);
-  const { forms, setForms } = FormStore;
 
-  const changeValueHanlder = async (e: any) => {
-    const newValue = e.target.value;
-    setValue(newValue);
-    onChangeValue(form_name, field.name, value());
+  const onChangeValue = (e: any) => {
+    setValue(e.currentTarget.value);
+    console.log("11", 11);
+    changeValue({
+      value: parseInt(value()),
+      field_name: field.name,
+    });
   };
-
-  // const onChangeValue = (e: any) => {
-  //   const newValue = e.target.value;
-  //   setValue(newValue);
-  //   //   const updateValues = {
-  //   //     ...data().values,
-  //   //     [field.name]: newValue,
-  //   //   };
-  //   //   const newData = {
-  //   //     ...data(),
-  //   //     values: updateValues,
-  //   //   };
-  //   //   setForms(newData);
-  // };
 
   return (
     <>
@@ -49,7 +40,7 @@ const Input: Component<IProps> = ({ form_name, field }: IProps) => {
         max={field.attributes.max}
         step={field.attributes.step}
         autocomplete={field.attributes.autocomplete}
-        onKeyUp={(e: any) => changeValueHanlder(e)}
+        onInput={(e: any) => onChangeValue(e)}
       />
     </>
   );

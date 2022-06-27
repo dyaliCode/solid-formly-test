@@ -30,21 +30,43 @@ const fields1: IInput[] = [
 const fields2: IInput[] = [
   {
     type: "input",
-    name: "first-name",
-    value: "",
+    name: "x",
+    value: 2,
     attributes: {
-      type: "text",
-      label: "First name",
-      id: "firstname",
+      id: "x",
+      type: "number",
       classes: "form-control",
-      placeholder: "First name 222",
+      label: "X",
     },
-    prefix: {
-      classes: ["form-group", "col-4"],
+    rules: ["required"],
+  },
+  {
+    type: "input",
+    name: "y",
+    attributes: {
+      id: "y",
+      type: "number",
+      classes: "form-control",
+      label: "Y",
     },
-    rules: ["required", "min:6"],
-    messages: {
-      min: "minim 20",
+  },
+  {
+    type: "input",
+    name: "total",
+    attributes: {
+      id: "total",
+      type: "number",
+      classes: "form-control",
+      label: "X + Y",
+    },
+    preprocess: (field: any, fields: any, values: any) => {
+      // console.log("parseInt(values.x)", parseInt(values.x));
+      field.value = parseInt(values.x) + parseInt(values.y);
+      console.log("field", field);
+      // console.log("field", field);
+      // if (values.touched === "x" || values.touched === "y") {
+      // }
+      return field;
     },
   },
 ];

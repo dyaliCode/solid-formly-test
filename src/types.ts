@@ -12,7 +12,7 @@ export interface IInput {
   rules?: string[];
   messages?: any;
   preprocess?: any; // for now
-  validation?: any; // for now
+  validation?: any;
 }
 export interface Attributes {
   id: string;
