@@ -20,6 +20,7 @@ import {
 const Field: Component<IForm> = (props: IForm) => {
   const { forms, setForms } = FormStore;
   const [currentForm, setCurrentForm] = createSignal<IStore>();
+  const [fields, setFields] = createSignal([]);
 
   onMount(async () => {
     await onInitValues(props.form_name, props.fields);
@@ -27,6 +28,7 @@ const Field: Component<IForm> = (props: IForm) => {
       (form: IStore) => form.form_name === props.form_name
     );
     setCurrentForm(_form);
+    setFields(_form.fields);
   });
 
   const onChangeValue = async (data: any) => {
@@ -74,24 +76,30 @@ const Field: Component<IForm> = (props: IForm) => {
 
     setCurrentForm(new_form);
     setForms(_forms);
+    setFields(_form.fields);
   };
 
   return (
     <>
-      {/* <Show when={getForm(props.form_name)?.fields.length}> */}
-      <pre>
-        <code>{JSON.stringify(getForm(props.form_name)?.fields, null, 2)}</code>
-      </pre>
-      <For each={getForm(props.form_name)?.fields}>
-        {(field: IInput) => (
-          <Input
-            form_name={getFormName(props.form_name)}
-            field={field}
-            changeValue={onChangeValue}
-          />
-        )}
-      </For>
-      {/* </Show> */}
+      <Show when={fields().length}>
+        {/* <pre>
+          <code>{JSON.stringify(currentForm()?.fields, null, 2)}</code>
+        </pre> */}
+        <For each={fields()}>
+          {(field: IInput) => (
+            <>
+              <pre>
+                <code>{JSON.stringify(fields(), null, 2)}</code>
+              </pre>
+              <Input
+                form_name={getFormName(props.form_name)}
+                field={field}
+                changeValue={onChangeValue}
+              />
+            </>
+          )}
+        </For>
+      </Show>
     </>
   );
 };

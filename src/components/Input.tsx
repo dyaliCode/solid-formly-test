@@ -17,9 +17,8 @@ const Input: Component<IProps> = ({
 
   const onChangeValue = (e: any) => {
     setValue(e.currentTarget.value);
-    console.log("11", 11);
     changeValue({
-      value: parseInt(value()),
+      value: value(),
       field_name: field.name,
     });
   };

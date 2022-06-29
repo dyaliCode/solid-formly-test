@@ -22,7 +22,7 @@ const fields1: IInput[] = [
     },
     rules: ["required", "min:6"],
     messages: {
-      min: "minim 20",
+      min: "min is 20",
     },
   },
 ];
@@ -81,12 +81,12 @@ const App: Component = () => {
             <button type="button">submit1</button>
           </form>
         </div>
-        <div class="col">
+        {/* <div class="col">
           <form>
             <Field fields={fields2} form_name={form_name2} />
             <button type="button">submit2</button>
           </form>
-        </div>
+        </div> */}
       </div>
     </div>
   );
