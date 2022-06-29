@@ -1,1 +1,11 @@
-@import "@picocss/pico/scss/pico.scss";
+.invalid-feedback {
+  display: block;
+}
+
+pre {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background-color: #eee;
+  max-height: 100vh;
+}
