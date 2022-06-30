@@ -1,75 +1,30 @@
-import type { Component } from "solid-js";
-import Formly from "./components/Formly";
+import { Component, createSignal } from "solid-js";
+import Formly from "./Formly";
 
-const form_name1 = "form1";
-const fields1 = [
-  {
-    type: "input",
-    name: "first-name",
-    value: "my-first-name",
-    attributes: {
-      type: "text",
-      label: "First name",
-      id: "firstname",
-      classes: "form-control",
-      placeholder: "First name",
-    },
-    prefix: {
-      classes: ["form-group", "col-4"],
-    },
-    rules: ["required", "min:6"],
-    messages: {
-      min: "min is 6",
-    },
-  },
-  {
-    type: "input",
-    name: "last-name",
-    value: "",
-    attributes: {
-      type: "text",
-      label: "last name",
-      id: "lastname",
-      classes: "form-control",
-      placeholder: "last name",
-    },
-    prefix: {
-      classes: ["form-group", "col-4"],
-    },
-    rules: ["required", "min:6"],
-    messages: {
-      min: "min is 6",
-    },
-  },
-  {
-    type: "input",
-    name: "age",
-    value: "",
-    attributes: {
-      type: "number",
-      label: "Age",
-      id: "age",
-      classes: "form-control",
-      placeholder: "Age",
-    },
-    prefix: {
-      classes: ["form-group", "col-4"],
-    },
-    rules: ["required", "min:6"],
-    messages: {
-      min: "min is 6",
-    },
-  },
-];
+// Fetch Users
+const fetchUsers = async () => {
+  const res = await fetch("https://jsonplaceholder.cypress.io/users?_limit=10");
+  const data = await res.json();
+  return data.map((item: any) => ({ value: item.id, title: item.name }));
+};
 
-const form_name2 = "form2";
+// Fetch posts
+const fetchPosts = async () => {
+  const res = await fetch("https://jsonplaceholder.cypress.io/posts?_limit=10");
+  const data = await res.json();
+  return data.map((item: any) => ({ value: item.id, title: item.title }));
+};
+
+let loading = false;
+const form_name2 = "my_form2";
 const fields2 = [
   {
     type: "input",
     name: "x",
+    value: 1,
     attributes: {
       type: "number",
-      classes: ["form-control"],
+      classes: "form-control",
       label: "X",
     },
     rules: ["required"],
@@ -77,9 +32,10 @@ const fields2 = [
   {
     type: "input",
     name: "y",
+    value: 2,
     attributes: {
       type: "number",
-      classes: ["form-control"],
+      classes: "form-control",
       label: "Y",
     },
   },
@@ -88,13 +44,54 @@ const fields2 = [
     name: "total",
     attributes: {
       type: "number",
-      classes: ["form-control"],
+      classes: "form-control",
       label: "X + Y",
     },
     preprocess: (field: any, fields: any, values: any) => {
-      console.log("values", values);
       field.value = parseInt(values.x) + parseInt(values.y);
-      // if (values.touched === "x" || values.touched === "y") {
+      return field;
+    },
+  },
+  {
+    type: "select",
+    name: "category",
+    attributes: {
+      classes: "form-control",
+      label: "Category",
+    },
+    rules: ["required"],
+    extra: {
+      options: [
+        {
+          value: null,
+          title: "None",
+        },
+        {
+          value: 1,
+          title: "Users",
+        },
+        {
+          value: 2,
+          title: "Posts",
+        },
+      ],
+    },
+  },
+  {
+    type: "select",
+    name: "items",
+    attributes: {
+      classes: "form-control",
+      label: "Items",
+    },
+    extra: {},
+    preprocess: async (field: any, fields: any, values: any) => {
+      console.log("values", values);
+      // if (values.touched === "category") {
+      loading = true;
+      field.extra.options =
+        values.category == 1 ? await fetchUsers() : await fetchPosts();
+      loading = false;
       // }
       return field;
     },
@@ -102,22 +99,7 @@ const fields2 = [
 ];
 
 const App: Component = () => {
-  const onSubmit = async (data: any) => {
-    console.log("data", data);
-  };
-
-  return (
-    <div class="container">
-      <div class="row">
-        {/* <div class="col-md-6">
-          <Formly fields={fields1} form_name={form_name1} onSubmit={onSubmit} />
-        </div> */}
-        <div class="col-md-12">
-          <Formly fields={fields2} form_name={form_name2} onSubmit={onSubmit} />
-        </div>
-      </div>
-    </div>
-  );
+  return <Formly form_name={form_name2} fields={fields2} />;
 };
 
 export default App;
