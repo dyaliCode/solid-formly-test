@@ -1,36 +1,23 @@
-import {
-  Component,
-  createEffect,
-  createSignal,
-  For,
-  JSX,
-  onCleanup,
-  onMount,
-  Show,
-  Switch,
-  Match,
-} from "solid-js";
-
-import Input from "./Input";
+import { Component, For, onMount, Show, Switch, Match } from "solid-js";
+import Input from "./input";
 import Select from "./Select";
-import { formStore, valueStore } from "./Stores";
-import { preprocessField } from "./Form";
-import { modifyMutable, produce } from "solid-js/store";
+import { formStore, valueStore } from "../utils/stores";
+import { preprocessField } from "../utils/form";
+import { produce } from "solid-js/store";
+import { validate } from "../utils/validation";
+import Message from "./message";
+import { IForm } from "../utils/types";
 
-type Iprops = {
-  form_name: string;
-  fields: any;
-};
-
-const Formly: Component<Iprops> = (props: Iprops) => {
+const Formly: Component<IForm> = (props: IForm) => {
   const { forms, setForms }: any = formStore;
   const { values, setValues }: any = valueStore;
 
+  // Init
   onMount(async () => {
     let form_values = { form_name: props.form_name, values: {}, touched: null };
     let _values: any = {};
 
-    const values = await Promise.all(
+    await Promise.all(
       props.fields.map(async (field: any) => {
         _values[`${field.name}`] = field.value ?? null;
         return field.value;
@@ -45,7 +32,7 @@ const Formly: Component<Iprops> = (props: Iprops) => {
         }
 
         // Validation field.
-        // field = await validate(field);
+        field = await validate(field);
 
         return field;
       })
@@ -65,7 +52,7 @@ const Formly: Component<Iprops> = (props: Iprops) => {
         if (form.form_name === props.form_name) {
           form = _currentForm;
         }
-        console.log("form", form);
+
         return form;
       });
     } else {
@@ -75,6 +62,7 @@ const Formly: Component<Iprops> = (props: Iprops) => {
     setValues(_values);
   });
 
+  // On change value
   const onChangeValue = async (data: any) => {
     let _values: any = {};
     setForms(
@@ -95,7 +83,7 @@ const Formly: Component<Iprops> = (props: Iprops) => {
           }
 
           // Validation field.
-          // field = await validate(field);
+          field = await validate(field);
 
           setValues(_values);
           return field;
@@ -113,19 +101,16 @@ const Formly: Component<Iprops> = (props: Iprops) => {
 
   return (
     <>
-      <h1>Formly</h1>
+      <h1>Solid Formly</h1>
       <form onSubmit={onSubmit}>
         <Show when={forms.length}>
           <pre>
-            {/* <code>{JSON.stringify(forms[0].fields, null, 2)}</code> */}
-            {/* <code>{JSON.stringify(forms[0], null, 2)}</code> */}
             <code>{JSON.stringify(values, null, 2)}</code>
           </pre>
           <For each={forms[0].fields}>
             {(field: any) => (
               <div class="form-group">
                 <Switch fallback={<p>type field not exist!</p>}>
-                  {/* Input field */}
                   <Match when={field.type === "input"}>
                     <Input
                       form_name={props.form_name}
@@ -133,7 +118,7 @@ const Formly: Component<Iprops> = (props: Iprops) => {
                       changeValue={onChangeValue}
                     />
                   </Match>
-                  {/* Select field */}
+
                   <Match when={field.type === "select"}>
                     <Select
                       form_name={props.form_name}
@@ -142,6 +127,16 @@ const Formly: Component<Iprops> = (props: Iprops) => {
                     />
                   </Match>
                 </Switch>
+                <Show when={field.validation && field.validation.errors.length}>
+                  <For each={field.validation.errors}>
+                    {(error: any) => (
+                      <Message
+                        error={error}
+                        messages={field.messages ? field.messages : []}
+                      />
+                    )}
+                  </For>
+                </Show>
               </div>
             )}
           </For>

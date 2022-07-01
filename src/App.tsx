@@ -1,5 +1,6 @@
 import { Component, createSignal } from "solid-js";
-import Formly from "./Formly";
+import Formly from "./components/formly";
+import { IField } from "./utils/types";
 
 const App: Component = () => {
   const [loading, setLoading] = createSignal<boolean>(false);
@@ -22,13 +23,14 @@ const App: Component = () => {
     return data.map((item: any) => ({ value: item.id, title: item.title }));
   };
 
-  const form_name2 = "my_form2";
-  const fields2 = [
+  const form_name2: string = "my_form2";
+  const fields2: IField[] = [
     {
       type: "input",
       name: "x",
-      value: 1,
+      // value: 1,
       attributes: {
+        id: "x",
         type: "number",
         classes: "form-control",
         label: "X",
@@ -40,6 +42,7 @@ const App: Component = () => {
       name: "y",
       value: 2,
       attributes: {
+        id: "y",
         type: "number",
         classes: "form-control",
         label: "Y",
@@ -49,12 +52,13 @@ const App: Component = () => {
       type: "input",
       name: "total",
       attributes: {
+        id: "total",
         type: "number",
         classes: "form-control",
         label: "X + Y",
       },
       preprocess: (field: any, fields: any, values: any) => {
-        field.value = parseInt(values.x) + parseInt(values.y);
+        field.value = parseInt(values.x) * parseInt(values.y);
         return field;
       },
     },
@@ -62,6 +66,8 @@ const App: Component = () => {
       type: "select",
       name: "category",
       attributes: {
+        id: "category",
+        type: "select",
         classes: "form-control",
         label: "Category",
       },
@@ -86,13 +92,15 @@ const App: Component = () => {
     {
       type: "select",
       name: "items",
+      rules: ["required"],
       attributes: {
+        type: "select",
+        id: "items",
         classes: "form-control",
         label: "Items",
       },
       extra: {},
-      preprocess: async (field: any, fields: any, values: any) => {
-        console.log("values", values);
+      preprocess: async (field: IField, fields: IField[], values: any) => {
         if (values.touched === "category") {
           setLoading(true);
           field.extra.options =
@@ -103,13 +111,28 @@ const App: Component = () => {
         return field;
       },
     },
+    {
+      type: "input",
+      name: "firstname",
+      attributes: {
+        id: "total",
+        type: "text",
+        classes: "form-control",
+        placeholder: "Tap your first name",
+      },
+      rules: ["required", "min:6"],
+      messages: {
+        required: "Firstname field is required!",
+        min: "First name field must have more that 6 caracters!",
+      },
+    },
   ];
 
   return (
-    <>
+    <div class="container">
       <Formly form_name={form_name2} fields={fields2} />
       {loading() ? "loading..." : "Create"}
-    </>
+    </div>
   );
 };
 

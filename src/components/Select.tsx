@@ -1,25 +1,12 @@
-import {
-  Component,
-  createEffect,
-  createSignal,
-  For,
-  JSX,
-  onCleanup,
-  onMount,
-  Show,
-} from "solid-js";
+import { Component, createSignal, For, JSX, onMount, Show } from "solid-js";
+import { isRequired } from "../utils/helper";
+import { IPropsField } from "../utils/types";
 
-type IProps = {
-  form_name: any;
-  field: any;
-  changeValue: any;
-};
-
-const Input: Component<IProps> = ({
+const Input: Component<IPropsField> = ({
   form_name,
   field,
   changeValue,
-}: IProps) => {
+}: IPropsField) => {
   const [multiple, setMultiple] = createSignal<boolean>(false);
 
   onMount(() => {
@@ -47,28 +34,25 @@ const Input: Component<IProps> = ({
   ): boolean => {
     if (is_multiple()) {
       if (field_value && field_value.length) {
-        console.log("111 :>> ", 111);
         const res = field_value.indexOf(option_value) != -1;
         return res;
-      } else if (field.default_value && field.default_value.length) {
-        console.log("222 :>> ", 222);
-        const res = field.default_value.indexOf(option_value) != -1;
+      } else if (field.value && field.value.length) {
+        const res = field.value.indexOf(option_value) != -1;
         return res;
       }
       return false;
     }
-    console.log("333 :>> ", 333);
     return option_value === field_value;
   };
 
   return (
     <>
-      <label for={field.id}>{field.attributes.label ?? ""}</label>
+      <label for={field.attributes.id}>{field.attributes.label ?? ""}</label>
       <select
         name={field.name}
         id={field.attributes.id}
         class={field.attributes.classes}
-        // required={isRequired(field)}
+        required={isRequired(field)}
         disabled={field.attributes.disabled}
         multiple={multiple()}
         onChange={onInput}

@@ -1,11 +1,14 @@
 .invalid-feedback {
   display: block;
+  color: rgb(237, 81, 81);
+  font-size: 0.75em;
+  margin-bottom: 20px;
 }
 
-pre {
-  margin-top: 10px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  background-color: #eee;
-  max-height: 100vh;
-}
+// pre {
+//   margin-top: 10px;
+//   padding: 10px;
+//   border: 1px solid #ddd;
+//   background-color: #eee;
+//   max-height: 100vh;
+// }
