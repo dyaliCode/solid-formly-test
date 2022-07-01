@@ -1,6 +1,6 @@
 import { Component, createSignal } from "solid-js";
 import Formly from "./components/formly";
-import { IField } from "./utils/types";
+import { IField, IValue } from "./utils/types";
 
 const App: Component = () => {
   const [loading, setLoading] = createSignal<boolean>(false);
@@ -23,8 +23,8 @@ const App: Component = () => {
     return data.map((item: any) => ({ value: item.id, title: item.title }));
   };
 
-  const form_name2: string = "my_form2";
-  const fields2: IField[] = [
+  const form_name1: string = "my_form1";
+  const fields1: IField[] = [
     {
       type: "input",
       name: "x",
@@ -111,6 +111,10 @@ const App: Component = () => {
         return field;
       },
     },
+  ];
+
+  const form_name2 = "my_form2";
+  const fields2 = [
     {
       type: "input",
       name: "firstname",
@@ -128,10 +132,22 @@ const App: Component = () => {
     },
   ];
 
+  const onSubmit1 = (values: IValue) => {
+    console.log("onSubmit1", values);
+  };
+  const onSubmit2 = (values: IValue) => {
+    console.log("onSubmit2", values);
+  };
+
   return (
     <div class="container">
-      <Formly form_name={form_name2} fields={fields2} />
-      {loading() ? "loading..." : "Create"}
+      <div>
+        <Formly form_name={form_name1} fields={fields1} onSubmit={onSubmit1} />
+        {loading() ? "loading..." : "Create"}
+      </div>
+      <div>
+        <Formly form_name={form_name2} fields={fields2} onSubmit={onSubmit2} />
+      </div>
     </div>
   );
 };

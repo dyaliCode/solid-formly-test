@@ -1,5 +1,5 @@
 import { createStore } from "solid-js/store";
-import { IForm } from "./types";
+import { IForm, IValue } from "./types";
 
 function _formStore() {
   const [forms, setForms] = createStore<IForm[]>([]);
@@ -8,7 +8,7 @@ function _formStore() {
 export const formStore = _formStore();
 
 function _valueStore() {
-  const [values, setValues] = createStore({});
+  const [values, setValues] = createStore<IValue[]>([]);
   return { values, setValues };
 }
 export const valueStore = _valueStore();

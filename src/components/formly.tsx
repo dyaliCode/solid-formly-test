@@ -2,11 +2,11 @@ import { Component, For, onMount, Show, Switch, Match } from "solid-js";
 import Input from "./input";
 import Select from "./Select";
 import { formStore, valueStore } from "../utils/stores";
-import { preprocessField } from "../utils/form";
+import { getForm, preprocessField } from "../utils/form";
 import { produce } from "solid-js/store";
 import { validate } from "../utils/validation";
 import Message from "./message";
-import { IForm } from "../utils/types";
+import { IForm, IValue } from "../utils/types";
 
 const Formly: Component<IForm> = (props: IForm) => {
   const { forms, setForms }: any = formStore;
@@ -58,8 +58,9 @@ const Formly: Component<IForm> = (props: IForm) => {
     } else {
       formsUpdated.push(_currentForm);
     }
-    setForms(formsUpdated);
-    setValues(_values);
+    setForms([...forms, _currentForm]);
+
+    setValues([...values, { form_name: props.form_name, values: _values }]);
   });
 
   // On change value
@@ -85,29 +86,36 @@ const Formly: Component<IForm> = (props: IForm) => {
           // Validation field.
           field = await validate(field);
 
-          setValues(_values);
+          // setValues(_values);
           return field;
         });
         return form;
+      })
+    );
+    setValues(
+      (value: any) => value.form_name === props.form_name,
+      produce((value: any) => {
+        value.values[`${data.field_name}`] = data.value;
+        return value;
       })
     );
   };
 
   const onSubmit = (e: any) => {
     e.preventDefault();
-    console.log("onSubmit", values);
-    console.log("values.items :>> ", values.items);
+    const _v = values.find((v: IValue) => v.form_name === props.form_name);
+    props.onSubmit(_v);
   };
 
   return (
     <>
       <h1>Solid Formly</h1>
       <form onSubmit={onSubmit}>
-        <Show when={forms.length}>
+        <Show when={getForm(props.form_name)}>
           <pre>
-            <code>{JSON.stringify(values, null, 2)}</code>
+            <code>{JSON.stringify(getForm(props.form_name), null, 2)}</code>
           </pre>
-          <For each={forms[0].fields}>
+          <For each={getForm(props.form_name).fields}>
             {(field: any) => (
               <div class="form-group">
                 <Switch fallback={<p>type field not exist!</p>}>
