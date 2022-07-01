@@ -155,7 +155,7 @@ const App: Component = () => {
 
       <article>
         <Formly form_name={form_name1} fields={fields1} onSubmit={onSubmit1} />
-        {loading() ? "loading..." : "Create"}
+        {loading() ? "loading..." : "done!"}
       </article>
       <hr />
       <article>
