@@ -1,9 +1,11 @@
-import { Component, createSignal } from "solid-js";
+import { Component, createSignal, Show } from "solid-js";
 import Formly from "./components/formly";
 import { IField, IValue } from "./utils/types";
 
 const App: Component = () => {
   const [loading, setLoading] = createSignal<boolean>(false);
+  const [isSubmited, setIsSubmited] = createSignal<boolean>(false);
+  const [values, setValues] = createSignal<IValue>();
 
   // Fetch Users
   const fetchUsers = async () => {
@@ -132,22 +134,62 @@ const App: Component = () => {
     },
   ];
 
-  const onSubmit1 = (values: IValue) => {
+  const onSubmit1 = (_values: IValue) => {
+    setIsSubmited(true);
+    setValues(_values);
     console.log("onSubmit1", values);
   };
-  const onSubmit2 = (values: IValue) => {
+  const onSubmit2 = (_values: IValue) => {
+    setIsSubmited(true);
+    setValues(_values);
     console.log("onSubmit2", values);
   };
 
   return (
     <div class="container">
-      <div>
+      <h1>Multiple dynamic forms</h1>
+      <ul>
+        <li>⚡️ Generate dynamic and reactive forms.</li>
+        <li>😍 Easy to extend with custom field type, custom validation.</li>
+      </ul>
+
+      <article>
         <Formly form_name={form_name1} fields={fields1} onSubmit={onSubmit1} />
         {loading() ? "loading..." : "Create"}
-      </div>
-      <div>
+      </article>
+      <hr />
+      <article>
         <Formly form_name={form_name2} fields={fields2} onSubmit={onSubmit2} />
-      </div>
+      </article>
+      <Show when={isSubmited()}>
+        <dialog open>
+          <article>
+            <header>
+              <a
+                href="#close"
+                aria-label="Close"
+                class="close"
+                onClick={() => setIsSubmited(false)}
+              ></a>
+              Form name: {values()?.form_name}
+            </header>
+            <p>Values</p>
+            <pre>
+              <code>{JSON.stringify(values()?.values, null, 2)}</code>
+            </pre>
+            <footer>
+              <a
+                href="#cancel"
+                role="button"
+                class="secondary"
+                onClick={() => setIsSubmited(false)}
+              >
+                Close
+              </a>
+            </footer>
+          </article>
+        </dialog>
+      </Show>
     </div>
   );
 };

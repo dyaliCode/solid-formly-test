@@ -2,6 +2,7 @@ export interface IForm {
   form_name: string;
   fields: IField[];
   onSubmit: Function;
+  inputSubmit?: ISubmit;
 }
 
 export interface IField {
@@ -44,4 +45,10 @@ export interface IPrefix {
 export interface IValue {
   form_name: string;
   values: any;
+}
+
+export interface ISubmit {
+  type: string;
+  text: string;
+  classes: string;
 }

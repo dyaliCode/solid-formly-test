@@ -66,6 +66,7 @@ const Formly: Component<IForm> = (props: IForm) => {
   // On change value
   const onChangeValue = async (data: any) => {
     let _values: any = {};
+    // Set forms.
     setForms(
       (form: any) => form.form_name === props.form_name,
       produce((form: any) => {
@@ -92,6 +93,7 @@ const Formly: Component<IForm> = (props: IForm) => {
         return form;
       })
     );
+    // Set Values.
     setValues(
       (value: any) => value.form_name === props.form_name,
       produce((value: any) => {
@@ -109,12 +111,12 @@ const Formly: Component<IForm> = (props: IForm) => {
 
   return (
     <>
-      <h1>Solid Formly</h1>
+      <h1>Form: {props.form_name}</h1>
       <form onSubmit={onSubmit}>
         <Show when={getForm(props.form_name)}>
-          <pre>
+          {/* <pre>
             <code>{JSON.stringify(getForm(props.form_name), null, 2)}</code>
-          </pre>
+          </pre> */}
           <For each={getForm(props.form_name).fields}>
             {(field: any) => (
               <div class="form-group">
