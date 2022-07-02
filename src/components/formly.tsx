@@ -107,7 +107,6 @@ const Formly: Component<IForm> = (props: IForm) => {
   const onSubmit = (e: any) => {
     e.preventDefault();
     const _v = values.find((v: IValue) => v.form_name === props.form_name);
-    console.log("_v", _v);
     props.onSubmit(_v);
   };
 
