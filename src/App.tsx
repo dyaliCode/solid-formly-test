@@ -28,6 +28,10 @@ const App: Component = () => {
   const form_name1: string = "my_form1";
   const fields1: IField[] = [
     {
+      prefix: {
+        tag: "fieldset",
+        classes: [""],
+      },
       type: "input",
       name: "x",
       // value: 1,

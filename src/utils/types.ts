@@ -1,3 +1,5 @@
+import { JSX } from "solid-js";
+
 export interface IForm {
   form_name: string;
   fields: IField[];
@@ -41,6 +43,12 @@ export interface Attributes {
 export interface IPrefix {
   classes: string[];
   tag: string;
+}
+
+export interface IPropsTag {
+  tag: string;
+  classes: string;
+  children: JSX.Element;
 }
 
 export interface IValue {

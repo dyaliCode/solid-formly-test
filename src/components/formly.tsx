@@ -121,33 +121,46 @@ const Formly: Component<IForm> = (props: IForm) => {
           <For each={getForm(props.form_name).fields}>
             {(field: any) => (
               <>
-                <Switch fallback={<p>type field not exist!</p>}>
-                  <Match when={field.type === "input"}>
-                    <Input
-                      form_name={props.form_name}
-                      field={field}
-                      changeValue={onChangeValue}
-                    />
-                  </Match>
-
-                  <Match when={field.type === "select"}>
-                    <Select
-                      form_name={props.form_name}
-                      field={field}
-                      changeValue={onChangeValue}
-                    />
-                  </Match>
-                </Switch>
-                <Show when={field.validation && field.validation.errors.length}>
-                  <For each={field.validation.errors}>
-                    {(error: any) => (
-                      <Message
-                        error={error}
-                        messages={field.messages ? field.messages : []}
+                <Tag
+                  tag={
+                    field.prefix
+                      ? field.prefix.tag
+                        ? field.prefix.tag
+                        : "div"
+                      : "div"
+                  }
+                  classes={"myclass"}
+                >
+                  <Switch fallback={<p>type field not exist!</p>}>
+                    <Match when={field.type === "input"}>
+                      <Input
+                        form_name={props.form_name}
+                        field={field}
+                        changeValue={onChangeValue}
                       />
-                    )}
-                  </For>
-                </Show>
+                    </Match>
+
+                    <Match when={field.type === "select"}>
+                      <Select
+                        form_name={props.form_name}
+                        field={field}
+                        changeValue={onChangeValue}
+                      />
+                    </Match>
+                  </Switch>
+                  <Show
+                    when={field.validation && field.validation.errors.length}
+                  >
+                    <For each={field.validation.errors}>
+                      {(error: any) => (
+                        <Message
+                          error={error}
+                          messages={field.messages ? field.messages : []}
+                        />
+                      )}
+                    </For>
+                  </Show>
+                </Tag>
               </>
             )}
           </For>

@@ -1,17 +1,13 @@
-import { Component, children } from "solid-js";
+import { Component, JSX } from "solid-js";
+import { Dynamic } from "solid-js/web";
+import { IPropsTag } from "../utils/types";
 
-type IProps = {
-  tag: string;
-  classes: string;
-  children: any;
-};
-
-const Tag: Component<IProps> = (props: IProps) => {
-  const tagElement = document.createElement(props.tag ?? "div");
-  tagElement.classList.add(props.classes ?? null);
-  //props.children.map((el: Element) => tagElement.append(el));
-  tagElement.append(props.children);
-  return tagElement;
+const Tag: Component<IPropsTag> = (props: IPropsTag) => {
+  return (
+    <Dynamic component={props.tag ?? "div"} class={props.classes ?? null}>
+      {props.children}
+    </Dynamic>
+  );
 };
 
 export default Tag;

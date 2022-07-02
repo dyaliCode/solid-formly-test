@@ -24,27 +24,22 @@ const Input: Component<IPropsField> = ({
   };
 
   return (
-    <Tag
-      tag={field.prefix ? (field.prefix.tag ? field.prefix.tag : "div") : "div"}
-      classes={"myclass"}
-    >
-      <input
-        type={field.attributes.type}
-        name={field.name}
-        value={field.value ?? null}
-        id={field.attributes.id ? field.attributes.id : field.name}
-        class={field.attributes.classes}
-        placeholder={field.attributes.placeholder}
-        required={isRequired(field)}
-        disabled={field.attributes.disabled}
-        readonly={field.attributes.readonly}
-        min={field.attributes.min}
-        max={field.attributes.max}
-        step={field.attributes.step}
-        autocomplete={field.attributes.autocomplete}
-        onInput={onInput}
-      />
-    </Tag>
+    <input
+      type={field.attributes.type}
+      name={field.name}
+      value={field.value ?? null}
+      id={field.attributes.id ? field.attributes.id : field.name}
+      class={field.attributes.classes}
+      placeholder={field.attributes.placeholder}
+      required={isRequired(field)}
+      disabled={field.attributes.disabled}
+      readonly={field.attributes.readonly}
+      min={field.attributes.min}
+      max={field.attributes.max}
+      step={field.attributes.step}
+      autocomplete={field.attributes.autocomplete}
+      onInput={onInput}
+    />
   );
 };
 
