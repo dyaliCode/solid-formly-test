@@ -1,6 +1,7 @@
 import { Component, JSX } from "solid-js";
 import { isRequired } from "../utils/helper";
 import { IPropsField } from "../utils/types";
+import Tag from "./tag";
 
 const Input: Component<IPropsField> = ({
   form_name,
@@ -23,8 +24,10 @@ const Input: Component<IPropsField> = ({
   };
 
   return (
-    <>
-      <label for={field.attributes.id}>{field.attributes.label ?? ""}</label>
+    <Tag
+      tag={field.prefix ? (field.prefix.tag ? field.prefix.tag : "div") : "div"}
+      classes={"myclass"}
+    >
       <input
         type={field.attributes.type}
         name={field.name}
@@ -41,7 +44,7 @@ const Input: Component<IPropsField> = ({
         autocomplete={field.attributes.autocomplete}
         onInput={onInput}
       />
-    </>
+    </Tag>
   );
 };
 

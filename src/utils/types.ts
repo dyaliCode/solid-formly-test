@@ -40,6 +40,7 @@ export interface Attributes {
 
 export interface IPrefix {
   classes: string[];
+  tag: string;
 }
 
 export interface IValue {

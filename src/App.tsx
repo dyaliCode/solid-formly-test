@@ -137,12 +137,12 @@ const App: Component = () => {
   const onSubmit1 = (_values: IValue) => {
     setIsSubmited(true);
     setValues(_values);
-    console.log("onSubmit1", values);
+    console.log("onSubmit1", values());
   };
   const onSubmit2 = (_values: IValue) => {
     setIsSubmited(true);
     setValues(_values);
-    console.log("onSubmit2", values);
+    console.log("onSubmit2", values());
   };
 
   return (

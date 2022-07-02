@@ -7,6 +7,7 @@ import { produce } from "solid-js/store";
 import { validate } from "../utils/validation";
 import Message from "./message";
 import { IForm, IValue } from "../utils/types";
+import Tag from "./tag";
 
 const Formly: Component<IForm> = (props: IForm) => {
   const { forms, setForms }: any = formStore;
@@ -106,6 +107,7 @@ const Formly: Component<IForm> = (props: IForm) => {
   const onSubmit = (e: any) => {
     e.preventDefault();
     const _v = values.find((v: IValue) => v.form_name === props.form_name);
+    console.log("_v", _v);
     props.onSubmit(_v);
   };
 
@@ -119,7 +121,7 @@ const Formly: Component<IForm> = (props: IForm) => {
           </pre> */}
           <For each={getForm(props.form_name).fields}>
             {(field: any) => (
-              <div class="form-group">
+              <>
                 <Switch fallback={<p>type field not exist!</p>}>
                   <Match when={field.type === "input"}>
                     <Input
@@ -147,7 +149,7 @@ const Formly: Component<IForm> = (props: IForm) => {
                     )}
                   </For>
                 </Show>
-              </div>
+              </>
             )}
           </For>
         </Show>
