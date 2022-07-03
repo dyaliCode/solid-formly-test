@@ -1,6 +1,5 @@
 import { Component, createSignal, Show } from "solid-js";
-import Formly from "./components/formly";
-import { IField, IValue } from "./utils/types";
+import { IValue, IField, Formly } from "./index";
 
 const App: Component = () => {
   const [loading, setLoading] = createSignal<boolean>(false);
@@ -30,15 +29,15 @@ const App: Component = () => {
     {
       prefix: {
         tag: "fieldset",
-        classes: [""],
+        classes: ["class-prefix"],
       },
       type: "input",
       name: "x",
-      // value: 1,
+      value: 1,
       attributes: {
         id: "x",
         type: "number",
-        classes: "form-control",
+        classes: ["form-control"],
         label: "X",
       },
       rules: ["required"],
@@ -50,7 +49,7 @@ const App: Component = () => {
       attributes: {
         id: "y",
         type: "number",
-        classes: "form-control",
+        classes: ["form-control"],
         label: "Y",
       },
     },
@@ -60,11 +59,11 @@ const App: Component = () => {
       attributes: {
         id: "total",
         type: "number",
-        classes: "form-control",
+        classes: ["form-control"],
         label: "X + Y",
       },
       preprocess: (field: any, fields: any, values: any) => {
-        field.value = parseInt(values.x) * parseInt(values.y);
+        field.value = parseInt(values.x) + parseInt(values.y);
         return field;
       },
     },
@@ -74,7 +73,7 @@ const App: Component = () => {
       attributes: {
         id: "category",
         type: "select",
-        classes: "form-control",
+        classes: ["form-control"],
         label: "Category",
       },
       rules: ["required"],
@@ -102,7 +101,7 @@ const App: Component = () => {
       attributes: {
         type: "select",
         id: "items",
-        classes: "form-control",
+        classes: ["form-control"],
         label: "Items",
       },
       extra: {},
@@ -127,7 +126,7 @@ const App: Component = () => {
       attributes: {
         id: "total",
         type: "text",
-        classes: "form-control",
+        classes: ["form-control"],
         placeholder: "Tap your first name",
       },
       rules: ["required", "min:6"],
@@ -162,9 +161,9 @@ const App: Component = () => {
         {loading() ? "loading..." : "done!"}
       </article>
       <hr />
-      <article>
+      {/* <article>
         <Formly form_name={form_name2} fields={fields2} onSubmit={onSubmit2} />
-      </article>
+      </article> */}
       <Show when={isSubmited()}>
         <dialog open>
           <article>

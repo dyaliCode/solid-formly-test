@@ -1,13 +1,12 @@
-import { Component, For, onMount, Show, Switch, Match } from "solid-js";
-import Input from "./input";
-import Select from "./Select";
+import { Component, For, onMount, Show } from "solid-js";
 import { formStore, valueStore } from "../utils/stores";
-import { getForm, preprocessField } from "../utils/form";
+import { FieldsTypes, getForm, getValue, preprocessField } from "../utils/form";
 import { produce } from "solid-js/store";
 import { validate } from "../utils/validation";
 import Message from "./message";
-import { IForm, IValue } from "../utils/types";
+import { IField, IForm, IValue } from "../utils/types";
 import Tag from "./tag";
+import { Dynamic } from "solid-js/web";
 
 const Formly: Component<IForm> = (props: IForm) => {
   const { forms, setForms }: any = formStore;
@@ -30,6 +29,7 @@ const Formly: Component<IForm> = (props: IForm) => {
         // Preprocess field.
         if (field.preprocess) {
           field = await preprocessField(field, props.fields, _values);
+          _values[`${field.name}`] = field.value;
         }
 
         // Validation field.
@@ -83,6 +83,14 @@ const Formly: Component<IForm> = (props: IForm) => {
           if (field.preprocess) {
             field = await preprocessField(field, form.fields, _values);
             _values[`${field.name}`] = field.value;
+
+            setValues(
+              (value: any) => value.form_name === props.form_name,
+              produce((value: any) => {
+                value.values[`${field.name}`] = field.value;
+                return value;
+              })
+            );
           }
 
           // Validation field.
@@ -104,6 +112,7 @@ const Formly: Component<IForm> = (props: IForm) => {
     );
   };
 
+  // On submit
   const onSubmit = (e: any) => {
     e.preventDefault();
     const _v = values.find((v: IValue) => v.form_name === props.form_name);
@@ -115,39 +124,26 @@ const Formly: Component<IForm> = (props: IForm) => {
       <h1>Form: {props.form_name}</h1>
       <form onSubmit={onSubmit}>
         <Show when={getForm(props.form_name)}>
-          {/* <pre>
-            <code>{JSON.stringify(getForm(props.form_name), null, 2)}</code>
-          </pre> */}
           <For each={getForm(props.form_name).fields}>
-            {(field: any) => (
+            {(field: IField) => (
               <>
                 <Tag
-                  tag={
+                  tag={field.prefix ? field.prefix.tag : "div"}
+                  classes={
                     field.prefix
-                      ? field.prefix.tag
-                        ? field.prefix.tag
-                        : "div"
-                      : "div"
+                      ? field.prefix.classes
+                        ? field.prefix.classes
+                        : []
+                      : []
                   }
-                  classes={"myclass"}
                 >
-                  <Switch fallback={<p>type field not exist!</p>}>
-                    <Match when={field.type === "input"}>
-                      <Input
-                        form_name={props.form_name}
-                        field={field}
-                        changeValue={onChangeValue}
-                      />
-                    </Match>
-
-                    <Match when={field.type === "select"}>
-                      <Select
-                        form_name={props.form_name}
-                        field={field}
-                        changeValue={onChangeValue}
-                      />
-                    </Match>
-                  </Switch>
+                  <Dynamic
+                    component={FieldsTypes[field.type]}
+                    form_name={props.form_name}
+                    field={field}
+                    changeValue={onChangeValue}
+                    name={field.name}
+                  />
                   <Show
                     when={field.validation && field.validation.errors.length}
                   >

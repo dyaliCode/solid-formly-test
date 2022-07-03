@@ -1,11 +1,15 @@
-import { Component, JSX } from "solid-js";
+import { Component } from "solid-js";
 import { Dynamic } from "solid-js/web";
+import { addClasses } from "../utils/form";
 import { IPropsTag } from "../utils/types";
 
-const Tag: Component<IPropsTag> = (props: IPropsTag) => {
+const Tag: Component<IPropsTag> = ({ tag, classes, children }: IPropsTag) => {
   return (
-    <Dynamic component={props.tag ?? "div"} class={props.classes ?? null}>
-      {props.children}
+    <Dynamic
+      component={tag ?? "div"}
+      classList={addClasses(classes ? classes : [])}
+    >
+      {children}
     </Dynamic>
   );
 };

@@ -1,4 +1,5 @@
 import { Component, createSignal, For, JSX, onMount, Show } from "solid-js";
+import { addClasses } from "../utils/form";
 import { isRequired } from "../utils/helper";
 import { IPropsField } from "../utils/types";
 
@@ -51,7 +52,9 @@ const Input: Component<IPropsField> = ({
       <select
         name={field.name}
         id={field.attributes.id}
-        class={field.attributes.classes}
+        classList={addClasses(
+          field.attributes.classes ? field.attributes.classes : []
+        )}
         required={isRequired(field)}
         disabled={field.attributes.disabled}
         multiple={multiple()}

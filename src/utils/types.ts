@@ -30,7 +30,7 @@ export interface Attributes {
   id: string;
   type: string;
   label?: string;
-  classes?: string;
+  classes?: string[];
   placeholder?: string;
   disabled?: boolean;
   readonly?: boolean;
@@ -41,13 +41,13 @@ export interface Attributes {
 }
 
 export interface IPrefix {
-  classes: string[];
   tag: string;
+  classes?: string[];
 }
 
 export interface IPropsTag {
   tag: string;
-  classes: string;
+  classes?: string[] | null;
   children: JSX.Element;
 }
 
