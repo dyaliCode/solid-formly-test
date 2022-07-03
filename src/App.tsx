@@ -137,15 +137,53 @@ const App: Component = () => {
     },
   ];
 
+  const form_name3 = "my_form3";
+  const fields3 = [
+    {
+      type: "checkbox",
+      name: "check1",
+      attributes: {
+        id: "check1",
+        label: "Checkbox Default:",
+        classes: ["checker"],
+      },
+      extra: {
+        items: [
+          {
+            name: "item1",
+            value: "value1",
+            title: "Value 1",
+          },
+          {
+            name: "item2",
+            value: "value2",
+            title: "Value 2",
+            checked: true,
+          },
+        ],
+      },
+      prefix: {
+        classes: ["form-group mb-3"],
+      },
+    },
+  ];
+
   const onSubmit1 = (_values: IValue) => {
     setIsSubmited(true);
     setValues(_values);
     console.log("onSubmit1", values());
   };
+
   const onSubmit2 = (_values: IValue) => {
     setIsSubmited(true);
     setValues(_values);
     console.log("onSubmit2", values());
+  };
+
+  const onSubmit3 = (_values: IValue) => {
+    setIsSubmited(true);
+    setValues(_values);
+    console.log("onSubmit3", values());
   };
 
   return (
@@ -156,14 +194,18 @@ const App: Component = () => {
         <li>😍 Easy to extend with custom field type, custom validation.</li>
       </ul>
 
-      <article>
+      {/* <article>
         <Formly form_name={form_name1} fields={fields1} onSubmit={onSubmit1} />
         {loading() ? "loading..." : "done!"}
-      </article>
-      <hr />
+      </article> */}
+      {/* <hr /> */}
       {/* <article>
         <Formly form_name={form_name2} fields={fields2} onSubmit={onSubmit2} />
       </article> */}
+      <hr />
+      <article>
+        <Formly form_name={form_name3} fields={fields3} onSubmit={onSubmit3} />
+      </article>
       <Show when={isSubmited()}>
         <dialog open>
           <article>

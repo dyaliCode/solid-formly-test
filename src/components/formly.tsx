@@ -123,41 +123,40 @@ const Formly: Component<IForm> = (props: IForm) => {
     <>
       <h1>Form: {props.form_name}</h1>
       <form onSubmit={onSubmit}>
+        <pre>
+          <code>{JSON.stringify(values, null, 2)}</code>
+        </pre>
         <Show when={getForm(props.form_name)}>
           <For each={getForm(props.form_name).fields}>
             {(field: IField) => (
-              <>
-                <Tag
-                  tag={field.prefix ? field.prefix.tag : "div"}
-                  classes={
-                    field.prefix
+              <Tag
+                tag={field.prefix ? field.prefix.tag : "div"}
+                classes={
+                  field.prefix
+                    ? field.prefix.classes
                       ? field.prefix.classes
-                        ? field.prefix.classes
-                        : []
                       : []
-                  }
-                >
-                  <Dynamic
-                    component={FieldsTypes[field.type]}
-                    form_name={props.form_name}
-                    field={field}
-                    changeValue={onChangeValue}
-                    name={field.name}
-                  />
-                  <Show
-                    when={field.validation && field.validation.errors.length}
-                  >
-                    <For each={field.validation.errors}>
-                      {(error: any) => (
-                        <Message
-                          error={error}
-                          messages={field.messages ? field.messages : []}
-                        />
-                      )}
-                    </For>
-                  </Show>
-                </Tag>
-              </>
+                    : []
+                }
+              >
+                <Dynamic
+                  component={FieldsTypes[field.type]}
+                  form_name={props.form_name}
+                  field={field}
+                  changeValue={onChangeValue}
+                  name={field.name}
+                />
+                <Show when={field.validation && field.validation.errors.length}>
+                  <For each={field.validation.errors}>
+                    {(error: any) => (
+                      <Message
+                        error={error}
+                        messages={field.messages ? field.messages : []}
+                      />
+                    )}
+                  </For>
+                </Show>
+              </Tag>
             )}
           </For>
         </Show>

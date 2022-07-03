@@ -1,5 +1,7 @@
 import Input from "../components/input";
 import Select from "../components/select";
+import Checkbox from "../components/checkbox";
+
 import { formStore, valueStore } from "./stores";
 import { IField, IForm, IValue } from "./types";
 
@@ -9,6 +11,7 @@ const { values }: any = valueStore;
 export const FieldsTypes: any = {
   input: Input,
   select: Select,
+  checkbox: Checkbox,
 };
 
 export async function preprocessField(
