@@ -59,5 +59,5 @@ export interface IValue {
 export interface ISubmit {
   type: string;
   text: string;
-  classes: string;
+  classes: string[];
 }
